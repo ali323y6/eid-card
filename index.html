@@ -2,27 +2,32 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>صانع بطاقات تهنئة العيد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صانع بطاقات منافس</title>
     <style>
-        body { font-family: 'Tahoma', sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        canvas { max-width: 100%; height: auto; border-radius: 10px; margin-top: 20px; display: none; }
-        input { padding: 10px; width: 80%; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px; font-size: 16px; }
-        button { padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        #downloadBtn { background-color: #007bff; margin-top: 10px; display: none; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f2f5; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        input { padding: 12px; width: 80%; border: 2px solid #007bff; border-radius: 10px; margin-bottom: 15px; font-size: 18px; outline: none; }
+        button { padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #218838; }
+        #canvasContainer { margin-top: 20px; display: none; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        canvas { max-width: 100%; height: auto; display: block; }
+        #downloadBtn { background-color: #007bff; margin-top: 15px; width: 100%; display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>بطاقة تهنئة العيد 🌙</h2>
+    <h2 style="color: #333;">بطاقة تهنئة العيد 🌙</h2>
     <input type="text" id="userName" placeholder="اكتب اسمك هنا...">
     <br>
-    <button onclick="generateCard()">توليد البطاقة</button>
-    <br>
-    <canvas id="cardCanvas"></canvas>
-    <br>
-    <button id="downloadBtn" onclick="downloadImage()">تحميل البطاقة ✨</button>
+    <button onclick="generateCard()">توليد المعاينة ✨</button>
+    
+    <div id="canvasContainer">
+        <canvas id="cardCanvas"></canvas>
+    </div>
+    
+    <button id="downloadBtn" onclick="downloadImage()">تحميل البطاقة الآن 📥</button>
 </div>
 
 <script>
@@ -30,36 +35,44 @@
     const ctx = canvas.getContext('2d');
     const img = new Image();
 
-    // ارفع صورتك على GitHub في نفس المجلد وغير الاسم هنا
+    // تأكد أن هذا الاسم يطابق اسم الصورة المرفوعة في GitHub
     img.src = 'eid_template.png'; 
 
     function generateCard() {
         const name = document.getElementById('userName').value;
-        if (!name) return alert("الرجاء كتابة الاسم");
+        if (!name) return alert("الرجاء كتابة الاسم أولاً");
 
-        // ضبط أبعاد الكانفاس لتطابق الصورة الأصلية
         canvas.width = img.width;
         canvas.height = img.height;
 
-        // رسم الصورة الخلفية
+        // رسم الخلفية
         ctx.drawImage(img, 0, 0);
 
-        // إعدادات النص (الاسم)
-        ctx.fillStyle = "#333"; // اختر اللون المناسب لتصميمك
-        ctx.font = "bold 50px Arial"; // اختر حجم الخط ونوعه
+        // إعدادات الخط لتناسب الإطار الأبيض في تصميمك
+        ctx.fillStyle = "#FFFFFF"; // لون النص أبيض ليناسب التصميم أو غيره لـ #0056b3 للأزرق
+        ctx.font = "bold 45px Arial"; // جرب تكبير أو تصغير الرقم 45 حسب الرغبة
         ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
 
-        // تحديد مكان كتابة الاسم (تغيير الأرقام حسب مساحة التصميم)
-        // مثلاً في منتصف العرض (width/2) وقبل النهاية بـ 100 بكسل
-        ctx.fillText(name, canvas.width / 2, canvas.height - 150);
+        // إحداثيات الإطار الأبيض في صورتك (تقريبية بناءً على التصميم)
+        // x = المنتصف (width/2)
+        // y = الإطار يقع في الثلث الأخير، جربنا 740 بكسل
+        const xPos = canvas.width / 2;
+        const yPos = canvas.height * 0.74; 
 
-        canvas.style.display = "block";
-        document.getElementById('downloadBtn').style.display = "inline-block";
+        ctx.fillText(name, xPos, yPos);
+
+        // إظهار المعاينة وزر التحميل
+        document.getElementById('canvasContainer').style.display = "block";
+        document.getElementById('downloadBtn').style.display = "block";
+        
+        // التمرير التلقائي للمعاينة
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
     function downloadImage() {
         const link = document.createElement('a');
-        link.download = 'Eid-Greeting.png';
+        link.download = 'Matajer-Munafis-Eid.png';
         link.href = canvas.toDataURL('image/png', 1.0);
         link.click();
     }
