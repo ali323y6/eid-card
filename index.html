@@ -3,200 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام تهنئة منافس | العيد 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
+    <title>بطاقة معايدة منافس</title>
     <style>
-        :root {
-            --primary: #00d2ff;
-            --secondary: #3a7bd5;
-            --accent: #28a745;
-            --bg: #0b0e14;
-        }
-
-        body {
-            background: var(--bg);
-            color: white;
-            font-family: 'Cairo', sans-serif;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* تأثير الخلفية المتحركة */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, #0b0e14 25%, #161b22 50%, #0b0e14 75%);
-            z-index: -1;
-        }
-
-        .terminal-box {
-            width: 90%;
-            max-width: 550px;
-            background: rgba(22, 27, 34, 0.9);
-            border: 1px solid var(--primary);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
-
-        .terminal-header {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .red { background: #ff5f56; }
-        .yellow { background: #ffbd2e; }
-        .green { background: #27c93f; }
-
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            text-shadow: 0 0 10px var(--primary);
-            letter-spacing: 1px;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px;
-            background: transparent;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            color: var(--primary);
-            font-size: 1.1rem;
-            text-align: center;
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
-        }
-
-        .btn-glitch {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(90deg, var(--secondary), var(--primary));
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: 900;
-            font-size: 1.1rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
-            position: relative;
-        }
-
-        .btn-glitch:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 210, 255, 0.4);
-        }
-
-        #preview-zone {
-            margin-top: 25px;
-            display: none;
-            animation: fadeIn 0.8s ease;
-        }
-
-        canvas {
-            width: 100%;
-            border-radius: 10px;
-            border: 2px solid #30363d;
-        }
-
-        .download-btn {
-            background: var(--accent);
-            margin-top: 15px;
-            display: none;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: 90%; max-width: 380px; text-align: center; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 16px; text-align: center; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s; }
+        .btn-gen { background-color: #007bff; color: white; margin-bottom: 10px; }
+        .btn-down { background-color: #28a745; color: white; display: none; }
+        #result { margin-top: 15px; display: none; }
+        canvas { width: 100%; border-radius: 8px; border: 1px solid #eee; }
     </style>
 </head>
 <body>
 
-<div class="terminal-box">
-    <div class="terminal-header">
-        <div class="dot red"></div>
-        <div class="dot yellow"></div>
-        <div class="dot green"></div>
-    </div>
-
-    <h1>System.Generate("Eid_Greeting")</h1>
+<div class="container">
+    <h3 style="margin-top:0; color:#444;">صمم بطاقتك الخاصة 🌙</h3>
+    <input type="text" id="nameInp" placeholder="اكتب اسمك هنا">
+    <button class="btn-gen" onclick="draw()">تجهيز البطاقة</button>
     
-    <div class="input-group">
-        <input type="text" id="userName" placeholder="[ أدخل اسم المستخدم هنا ]" autocomplete="off">
-    </div>
-
-    <button class="btn-glitch" onclick="processIdentity()">تشغيل مصفوفة التهنئة ⚡</button>
-
-    <div id="preview-zone">
-        <canvas id="cardCanvas"></canvas>
-        <button class="btn-glitch download-btn" id="dlBtn" onclick="saveArchive()">تحميل الملف النهائي (.PNG)</button>
+    <div id="result">
+        <canvas id="c"></canvas>
+        <button class="btn-down" id="btnD" onclick="down()">حفظ الصورة بجهازك</button>
     </div>
 </div>
 
 <script>
-    const canvas = document.getElementById('cardCanvas');
-    const ctx = canvas.getContext('2d');
-    const cardImg = new Image();
-    
-    // تأكد أن الاسم يطابق صورتك في GitHub
-    cardImg.src = 'eid_template.png';
+    const cvs = document.getElementById('c');
+    const ctx = cvs.getContext('2d');
+    const img = new Image();
+    img.src = 'eid_template.png'; // الاسم يطابق ملفك في GitHub الآن
 
-    function processIdentity() {
-        const name = document.getElementById('userName').value;
-        if (!name) return alert("خطأ: لم يتم اكتشاف اسم!");
+    function draw() {
+        const name = document.getElementById('nameInp').value;
+        if (!name) return alert("لطفاً اكتب الاسم");
 
-        if (!cardImg.complete) return alert("جاري الاتصال بقاعدة البيانات.. حاول مجدداً");
+        cvs.width = img.width;
+        cvs.height = img.height;
+        ctx.drawImage(img, 0, 0);
 
-        canvas.width = cardImg.width;
-        canvas.height = cardImg.height;
-
-        // رسم القالب
-        ctx.drawImage(cardImg, 0, 0);
-
-        // إعدادات النص الاحترافية
-        ctx.fillStyle = "#ffffff";
+        // إعدادات النص (اللون والحجم)
+        ctx.fillStyle = "#ffffff"; 
+        ctx.font = "bold 42px Arial"; // حجم مناسب للإطار
         ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        
-        // استخدام خط فخم إذا كان مدعوماً أو Arial
-        ctx.font = "bold 55px 'Tajawal', Arial"; 
 
-        // الإحداثيات الدقيقة لمربعك في التصميم
-        const targetX = canvas.width / 2;
-        const targetY = canvas.height * 0.738; 
+        // إحداثيات الإطار الأبيض في تصميمك
+        ctx.fillText(name, cvs.width / 2, cvs.height * 0.77);
 
-        ctx.fillText(name, targetX, targetY);
-
-        // إظهار النتائج
-        document.getElementById('preview-zone').style.display = 'block';
-        document.getElementById('dlBtn').style.display = 'block';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('btnD').style.display = 'block';
     }
 
-    function saveArchive() {
-        const dataURL = canvas.toDataURL('image/png');
-        const vault = document.createElement('a');
-        vault.href = dataURL;
-        vault.download = `Munafis_Eid_2026_${Math.floor(Math.random()*1000)}.png`;
-        vault.click();
+    function down() {
+        const a = document.createElement('a');
+        a.download = 'eid-munafis.png';
+        a.href = cvs.toDataURL();
+        a.click();
     }
 </script>
 
