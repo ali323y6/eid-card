@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صانع بطاقات منافس</title>
+    <title>صانع بطاقات تهنئة العيد</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f2f5; padding: 20px; }
+        body { font-family: 'Tahoma', sans-serif; text-align: center; background-color: #f0f2f5; padding: 20px; }
         .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        input { padding: 12px; width: 80%; border: 2px solid #007bff; border-radius: 10px; margin-bottom: 15px; font-size: 18px; outline: none; }
-        button { padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
-        button:hover { background-color: #218838; }
-        #canvasContainer { margin-top: 20px; display: none; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        canvas { max-width: 100%; height: auto; display: block; }
-        #downloadBtn { background-color: #007bff; margin-top: 15px; width: 100%; display: none; }
+        input { padding: 12px; width: 80%; border: 2px solid #007bff; border-radius: 10px; margin-bottom: 15px; font-size: 18px; }
+        button { padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        #canvasContainer { margin-top: 20px; display: none; border-radius: 15px; overflow: hidden; border: 1px solid #ddd; }
+        canvas { max-width: 100%; height: auto; display: block; margin: auto; }
+        #downloadBtn { background-color: #007bff; margin-top: 15px; display: none; width: 100%; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="color: #333;">بطاقة تهنئة العيد 🌙</h2>
+    <h2>بطاقة تهنئة العيد 🌙</h2>
     <input type="text" id="userName" placeholder="اكتب اسمك هنا...">
     <br>
     <button onclick="generateCard()">توليد المعاينة ✨</button>
@@ -34,46 +33,45 @@
     const canvas = document.getElementById('cardCanvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
-
-    // تأكد أن هذا الاسم يطابق اسم الصورة المرفوعة في GitHub
+    
+    // سحب الصورة والتأكد من تحميلها
     img.src = 'eid_template.png'; 
 
     function generateCard() {
         const name = document.getElementById('userName').value;
-        if (!name) return alert("الرجاء كتابة الاسم أولاً");
+        if (!name) return alert("الرجاء كتابة الاسم");
+
+        // التأكد من أن الصورة محملة تماماً قبل الرسم
+        if (!img.complete) return alert("جاري تحميل قالب البطاقة.. حاول مرة أخرى خلال ثوانٍ");
 
         canvas.width = img.width;
         canvas.height = img.height;
 
-        // رسم الخلفية
+        // رسم الصورة
         ctx.drawImage(img, 0, 0);
 
-        // إعدادات الخط لتناسب الإطار الأبيض في تصميمك
-        ctx.fillStyle = "#FFFFFF"; // لون النص أبيض ليناسب التصميم أو غيره لـ #0056b3 للأزرق
-        ctx.font = "bold 45px Arial"; // جرب تكبير أو تصغير الرقم 45 حسب الرغبة
+        // إعدادات الخط (معدلة لتناسب مكان المربع في تصميمك)
+        ctx.fillStyle = "#ffffff"; 
+        ctx.font = "bold 40px Arial"; 
         ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
+        
+        // إحداثيات المربع الأبيض في صورتك
+        const x = canvas.width / 2;
+        const y = canvas.height * 0.74; 
 
-        // إحداثيات الإطار الأبيض في صورتك (تقريبية بناءً على التصميم)
-        // x = المنتصف (width/2)
-        // y = الإطار يقع في الثلث الأخير، جربنا 740 بكسل
-        const xPos = canvas.width / 2;
-        const yPos = canvas.height * 0.74; 
+        ctx.fillText(name, x, y);
 
-        ctx.fillText(name, xPos, yPos);
-
-        // إظهار المعاينة وزر التحميل
+        // إظهار المعاينة والزر
         document.getElementById('canvasContainer').style.display = "block";
         document.getElementById('downloadBtn').style.display = "block";
-        
-        // التمرير التلقائي للمعاينة
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
     function downloadImage() {
+        // طريقة تحميل تضمن حفظها كصورة PNG
+        const image = canvas.toDataURL("image/png");
         const link = document.createElement('a');
-        link.download = 'Matajer-Munafis-Eid.png';
-        link.href = canvas.toDataURL('image/png', 1.0);
+        link.download = 'eid-card-munafis.png';
+        link.href = image;
         link.click();
     }
 </script>
