@@ -5,26 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بطاقة معايدة منافس</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: 90%; max-width: 380px; text-align: center; }
+        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 90%; max-width: 380px; text-align: center; }
         input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; box-sizing: border-box; font-size: 16px; text-align: center; }
-        button { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s; }
-        .btn-gen { background-color: #007bff; color: white; margin-bottom: 10px; }
-        .btn-down { background-color: #28a745; color: white; display: none; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .btn-gen { background-color: #007bff; color: white; }
         #result { margin-top: 15px; display: none; }
-        canvas { width: 100%; border-radius: 8px; border: 1px solid #eee; }
+        canvas { width: 100%; border-radius: 8px; border: 1px solid #eee; margin-bottom: 10px; }
+        .btn-down { background-color: #28a745; color: white; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h3 style="margin-top:0; color:#444;">صمم بطاقتك الخاصة 🌙</h3>
+    <h3>بطاقة معايدة منافس 🌙</h3>
     <input type="text" id="nameInp" placeholder="اكتب اسمك هنا">
-    <button class="btn-gen" onclick="draw()">تجهيز البطاقة</button>
+    <button class="btn-gen" onclick="draw()">تجهيز البطاقة ✨</button>
     
     <div id="result">
         <canvas id="c"></canvas>
-        <button class="btn-down" id="btnD" onclick="down()">حفظ الصورة بجهازك</button>
+        <button class="btn-down" onclick="down()">حفظ الصورة بجهازك 📥</button>
     </div>
 </div>
 
@@ -32,32 +32,38 @@
     const cvs = document.getElementById('c');
     const ctx = cvs.getContext('2d');
     const img = new Image();
-    img.src = 'eid_template.png'; // الاسم يطابق ملفك في GitHub الآن
+
+    // جرب رفع الصورة باسم eid_card.jpg وغير الاسم هنا إذا لزم الأمر
+    img.src = 'eid_template.png'; 
 
     function draw() {
         const name = document.getElementById('nameInp').value;
         if (!name) return alert("لطفاً اكتب الاسم");
+        
+        // التأكد من تحميل الصورة
+        if (!img.complete || img.naturalWidth === 0) {
+            return alert("خطأ: لم يتم العثور على ملف الصورة. تأكد أن الملف مرفوع باسم eid_template.png");
+        }
 
         cvs.width = img.width;
         cvs.height = img.height;
         ctx.drawImage(img, 0, 0);
 
-        // إعدادات النص (اللون والحجم)
+        // تعديل اللون والمكان ليناسب تصميم "منافس"
         ctx.fillStyle = "#ffffff"; 
-        ctx.font = "bold 42px Arial"; // حجم مناسب للإطار
+        ctx.font = "bold 45px Arial"; 
         ctx.textAlign = "center";
-
-        // إحداثيات الإطار الأبيض في تصميمك
+        
+        // إحداثيات المربع الأبيض في صورتك
         ctx.fillText(name, cvs.width / 2, cvs.height * 0.77);
 
         document.getElementById('result').style.display = 'block';
-        document.getElementById('btnD').style.display = 'block';
     }
 
     function down() {
         const a = document.createElement('a');
         a.download = 'eid-munafis.png';
-        a.href = cvs.toDataURL();
+        a.href = cvs.toDataURL("image/png");
         a.click();
     }
 </script>
