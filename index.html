@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>صانع بطاقات تهنئة العيد</title>
+    <style>
+        body { font-family: 'Tahoma', sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        canvas { max-width: 100%; height: auto; border-radius: 10px; margin-top: 20px; display: none; }
+        input { padding: 10px; width: 80%; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px; font-size: 16px; }
+        button { padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #downloadBtn { background-color: #007bff; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>بطاقة تهنئة العيد 🌙</h2>
+    <input type="text" id="userName" placeholder="اكتب اسمك هنا...">
+    <br>
+    <button onclick="generateCard()">توليد البطاقة</button>
+    <br>
+    <canvas id="cardCanvas"></canvas>
+    <br>
+    <button id="downloadBtn" onclick="downloadImage()">تحميل البطاقة ✨</button>
+</div>
+
+<script>
+    const canvas = document.getElementById('cardCanvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+
+    // ارفع صورتك على GitHub في نفس المجلد وغير الاسم هنا
+    img.src = 'eid_template.png'; 
+
+    function generateCard() {
+        const name = document.getElementById('userName').value;
+        if (!name) return alert("الرجاء كتابة الاسم");
+
+        // ضبط أبعاد الكانفاس لتطابق الصورة الأصلية
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // رسم الصورة الخلفية
+        ctx.drawImage(img, 0, 0);
+
+        // إعدادات النص (الاسم)
+        ctx.fillStyle = "#333"; // اختر اللون المناسب لتصميمك
+        ctx.font = "bold 50px Arial"; // اختر حجم الخط ونوعه
+        ctx.textAlign = "center";
+
+        // تحديد مكان كتابة الاسم (تغيير الأرقام حسب مساحة التصميم)
+        // مثلاً في منتصف العرض (width/2) وقبل النهاية بـ 100 بكسل
+        ctx.fillText(name, canvas.width / 2, canvas.height - 150);
+
+        canvas.style.display = "block";
+        document.getElementById('downloadBtn').style.display = "inline-block";
+    }
+
+    function downloadImage() {
+        const link = document.createElement('a');
+        link.download = 'Eid-Greeting.png';
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+    }
+</script>
+
+</body>
+</html>
